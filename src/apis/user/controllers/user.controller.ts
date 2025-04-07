@@ -1,4 +1,11 @@
-import { ApiCreate, ApiGetAll, BaseController, BaseResponse, PaginationDto, PaginationResponse } from '@app/base';
+import {
+  ApiCreate,
+  ApiGetAll,
+  BaseController,
+  BaseResponse,
+  PaginationDto,
+  PaginationResponse,
+} from '@app/base';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { UserEntity } from '../entities/user.entities';
 import { UserService } from '../services/user.service';
@@ -23,9 +30,9 @@ export class UserController extends BaseController<UserEntity>(
     schema: {
       properties: {
         status: { example: 409 },
-        error: { example: 'User with this email already exists' }
-      }
-    }
+        error: { example: 'User with this email already exists' },
+      },
+    },
   })
   create(@Body() body: CreateUserDto): Promise<BaseResponse<UserEntity>> {
     return super.create(body);
@@ -33,7 +40,9 @@ export class UserController extends BaseController<UserEntity>(
 
   @Get('getAll')
   @ApiGetAll(UserEntity, 'users')
-  getAll(@Query() query: PaginationDto): Promise<PaginationResponse<UserEntity>> {
+  getAll(
+    @Query() query: PaginationDto,
+  ): Promise<PaginationResponse<UserEntity>> {
     return super.getAll(query);
   }
 }

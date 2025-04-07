@@ -1,13 +1,13 @@
 import { IsNumberString, IsOptional } from 'class-validator';
 
 export class PaginationDto {
-	@IsOptional()
-	@IsNumberString()
-	limit?: string;
+  @IsOptional()
+  @IsNumberString()
+  limit?: string;
 
-	@IsOptional()
-	@IsNumberString()
-	page?: string;
+  @IsOptional()
+  @IsNumberString()
+  page?: string;
 }
 
 export interface BaseResponse<T> {
@@ -25,5 +25,5 @@ export interface PaginationResponse<T> {
     limit: number;
     totalItems: number;
     totalPages: number;
-  }
+  };
 }

@@ -6,7 +6,7 @@ export class UserAlreadyExistsException extends HttpException {
       {
         statusCode: HttpStatus.CONFLICT,
         message: [`User with this ${field} already exists`],
-        error: 'Conflict'
+        error: 'Conflict',
       },
       HttpStatus.CONFLICT,
     );
@@ -19,7 +19,7 @@ export class UserNotFoundException extends HttpException {
       {
         statusCode: HttpStatus.NOT_FOUND,
         message: [`User with id ${id} not found`],
-        error: 'Not Found'
+        error: 'Not Found',
       },
       HttpStatus.NOT_FOUND,
     );

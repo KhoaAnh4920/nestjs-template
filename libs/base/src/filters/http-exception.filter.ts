@@ -16,10 +16,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     response.status(status).json({
       statusCode: status,
-      message: Array.isArray(exceptionResponse.message) 
-        ? exceptionResponse.message 
+      message: Array.isArray(exceptionResponse.message)
+        ? exceptionResponse.message
         : [exceptionResponse.error || exceptionResponse.message],
-      error: exception.name.replace('Exception', '')
+      error: exception.name.replace('Exception', ''),
     });
   }
 }

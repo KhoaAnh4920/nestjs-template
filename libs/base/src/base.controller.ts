@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Body, Delete, Get, Param, Patch, Post, Query, BadRequestException } from '@nestjs/common';
+import {
+  Body,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 import { IsUUID } from 'class-validator';
 import { BaseResponse, PaginationDto, PaginationResponse } from './base.dto';
 import { BaseEntity } from './base.entity';
@@ -39,7 +48,9 @@ export function BaseController<Entity extends BaseEntity>(
 
     @Get('all')
     @ApiGetAll($ref, name)
-    async getAll(@Query() query: PaginationDto): Promise<PaginationResponse<Entity>> {
+    async getAll(
+      @Query() query: PaginationDto,
+    ): Promise<PaginationResponse<Entity>> {
       const [data, total] = await this.service.getAllWithPagination(
         query,
         {},
@@ -47,7 +58,7 @@ export function BaseController<Entity extends BaseEntity>(
         { createdAt: 'DESC' },
         ...this.relations,
       );
-      
+
       const page = query.page ? parseInt(query.page) : 1;
       const limit = query.limit ? parseInt(query.limit) : 10;
 
@@ -64,18 +75,22 @@ export function BaseController<Entity extends BaseEntity>(
       };
     }
 
-    @Get('detail/:id') 
+    @Get('detail/:id')
     @ApiGetDetail($ref, name)
     async getDetail(@Param() params: UUIDParam): Promise<BaseResponse<Entity>> {
       try {
-        const result = await this.service.getOneByIdOrFail(params.id, ...this.relations);
+        const result = await this.service.getOneByIdOrFail(
+          params.id,
+          ...this.relations,
+        );
         return {
           statusCode: 200,
           success: true,
-          data: result
+          data: result,
         };
       } catch (error) {
-        if (error?.code === '22P02') { // PostgreSQL invalid UUID error code
+        if (error?.code === '22P02') {
+          // PostgreSQL invalid UUID error code
           throw new BadRequestException('Invalid UUID format');
         }
         throw error;
@@ -84,13 +99,16 @@ export function BaseController<Entity extends BaseEntity>(
 
     @Patch('update/:id')
     @ApiUpdate($ref, name)
-    async update(@Param() params: UUIDParam, @Body() body): Promise<BaseResponse<Entity>> {
+    async update(
+      @Param() params: UUIDParam,
+      @Body() body,
+    ): Promise<BaseResponse<Entity>> {
       try {
         const result = await this.service.updateById(params.id, body);
         return {
-          statusCode: 200, 
+          statusCode: 200,
           success: true,
-          data: result
+          data: result,
         };
       } catch (error) {
         if (error?.code === '22P02') {
@@ -108,7 +126,7 @@ export function BaseController<Entity extends BaseEntity>(
         return {
           statusCode: 200,
           success: true,
-          data: result
+          data: result,
         };
       } catch (error) {
         if (error?.code === '22P02') {

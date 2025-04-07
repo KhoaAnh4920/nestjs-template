@@ -1,14 +1,19 @@
-import { 
-  Controller, 
-  Post, 
-  Body, 
-  UseGuards, 
-  Request, 
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
   Get,
   HttpCode,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
@@ -28,8 +33,8 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'User login' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Login successful',
     schema: {
       properties: {
@@ -39,10 +44,10 @@ export class AuthController {
             user: { type: 'object' },
             accessToken: { type: 'string' },
             refreshToken: { type: 'string' },
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(@Request() req, @Body() loginDto: LoginDto) {
@@ -56,11 +61,11 @@ export class AuthController {
   @ApiOperation({ summary: 'Refresh access token' })
   @ApiResponse({ status: 200, description: 'Token refreshed successfully' })
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
-  async refreshToken(
-    @Request() req,
-    @Body() refreshTokenDto: RefreshTokenDto
-  ) {
-    const tokens = await this.authService.refreshTokens(req.user.sub, refreshTokenDto.refreshToken);
+  async refreshToken(@Request() req, @Body() refreshTokenDto: RefreshTokenDto) {
+    const tokens = await this.authService.refreshTokens(
+      req.user.sub,
+      refreshTokenDto.refreshToken,
+    );
     return { statusCode: HttpStatus.OK, data: tokens };
   }
 

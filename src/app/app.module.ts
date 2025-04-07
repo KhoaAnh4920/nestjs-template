@@ -9,10 +9,10 @@ import { ApiModule } from 'src/apis/api.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     DatabaseModule,
-    ApiModule
+    ApiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

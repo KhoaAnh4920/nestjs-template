@@ -16,14 +16,15 @@ export class CreateUserDto {
       minSymbols: 1,
     },
     {
-      message: 'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character',
-    }
+      message:
+        'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character',
+    },
   )
   @IsNotEmpty({ message: 'Password is required' })
-  @ApiProperty({ 
-    description: 'Password of user', 
+  @ApiProperty({
+    description: 'Password of user',
     example: 'P@ssw0rd',
-    minLength: 8 
+    minLength: 8,
   })
   password!: string;
 }

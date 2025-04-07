@@ -6,7 +6,10 @@ import { Request } from 'express';
 import { StrategyOptionsWithRequest } from 'passport-jwt';
 
 @Injectable()
-export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+export class JwtRefreshStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
   constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
