@@ -6,12 +6,27 @@ import {
   PaginationDto,
   PaginationResponse,
 } from '@app/base';
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { UserEntity } from '../entities/user.entities';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController extends BaseController<UserEntity>(
   UserEntity,
@@ -44,5 +59,34 @@ export class UserController extends BaseController<UserEntity>(
     @Query() query: PaginationDto,
   ): Promise<PaginationResponse<UserEntity>> {
     return super.getAll(query);
+  }
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the authenticated user profile',
+    type: UserEntity,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getProfile(
+    @Request() req,
+  ): Promise<BaseResponse<Omit<UserEntity, 'password'>>> {
+    const userId = req.user.id;
+    const user = await this.userService.findById(userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const { password, ...userWithoutPassword } = user;
+
+    return {
+      statusCode: 200,
+      success: true,
+      data: userWithoutPassword as Omit<UserEntity, 'password'>,
+    };
   }
 }

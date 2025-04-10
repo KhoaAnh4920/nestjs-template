@@ -40,14 +40,21 @@ export class UserService extends BaseService<UserEntity> {
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
-    return this.userRepo.findOne({ where: { email } });
+    return super.getOne({ email });
   }
 
   async findById(id: string): Promise<UserEntity | null> {
-    return this.userRepo.findOne({ where: { id } });
+    return super.getOneById(id);
+  }
+
+  async findByEmailOrId(email: string, id: string): Promise<UserEntity | null> {
+    return super.getOne({ email, id });
   }
 
   async updateLastLogin(userId: string): Promise<void> {
-    await this.userRepo.update(userId, { lastLogin: new Date() });
+    // await this.userRepo.update(userId, { lastLogin: new Date() });
+    await super.updateById(userId, {
+      lastLogin: new Date(),
+    });
   }
 }
