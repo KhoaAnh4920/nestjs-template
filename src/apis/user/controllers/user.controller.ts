@@ -1,6 +1,7 @@
 import {
   ApiCreate,
   ApiGetAll,
+  ApiGetDetail,
   BaseController,
   BaseResponse,
   PaginationDto,
@@ -65,11 +66,7 @@ export class UserController extends BaseController<UserEntity>(
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user profile' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns the authenticated user profile',
-    type: UserEntity,
-  })
+  @ApiGetDetail(UserEntity, 'user')
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(
     @Request() req,
